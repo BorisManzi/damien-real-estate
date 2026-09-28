@@ -1,38 +1,54 @@
-import type { PricePeriod, Property } from "@/types/property";
-
-export function formatPrice(
-  price: number,
-  currency: Property["currency"] = "RWF",
-  period: PricePeriod = null
-): string {
-  const formatted = new Intl.NumberFormat("en-RW", {
-    style: "currency",
-    currency,
-    maximumFractionDigits: 0,
-  }).format(price);
-
-  if (period === "month") return `${formatted} / month`;
-  if (period === "night") return `${formatted} / night`;
-  return formatted;
+export function formatRwf(amount: number) {
+  return `RWF ${amount.toLocaleString("en-US")}`;
 }
 
-export function formatLocation(property: Pick<Property, "city" | "district" | "neighborhood">) {
-  if (property.neighborhood) {
-    return `${property.city} · ${property.neighborhood}`;
-  }
-  return `${property.city} · ${property.district}`;
+export function formatPrice(amount: number, period: "month" | "sale" | null) {
+  const base = formatRwf(amount);
+  if (period === "month") return `${base} / month`;
+  return base;
 }
 
-export function formatSpecs(property: Property): string {
-  const parts: string[] = [];
-  if (property.bedrooms != null) parts.push(`${property.bedrooms} beds`);
-  if (property.bathrooms != null) parts.push(`${property.bathrooms} baths`);
-  if (property.size != null && property.sizeUnit) {
-    parts.push(`${property.size} ${property.sizeUnit}`);
-  }
-  return parts.join(" · ");
+export function formatSize(m2: number) {
+  return `${m2.toLocaleString("en-US")} m²`;
 }
 
-export function statusLabel(status: string): string {
-  return status.replace(/-/g, " ").toUpperCase();
+export function locationLine(neighborhood: string, city: string) {
+  if (neighborhood && neighborhood !== city) return `${city} · ${neighborhood}`;
+  return city;
+}
+
+export function formatCompact(n: number) {
+  return n.toLocaleString("en-US");
+}
+
+export function formatWhen(iso: string) {
+  const d = new Date(iso);
+  const diff = Date.now() - d.getTime();
+  const mins = Math.max(0, Math.floor(diff / 60000));
+  if (mins < 1) return "Just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}d ago`;
+  return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+}
+
+export function rwandaDigits(phone: string) {
+  const d = phone.replace(/[^\d]/g, "");
+  if (d.startsWith("250")) return d;
+  if (d.startsWith("0")) return `250${d.slice(1)}`;
+  return `250${d}`;
+}
+
+export function telHref(phone: string) {
+  return `tel:+${rwandaDigits(phone)}`;
+}
+
+export function waHref(phone: string, text: string) {
+  return `https://wa.me/${rwandaDigits(phone)}?text=${encodeURIComponent(text)}`;
+}
+
+export function formatPct(n: number) {
+  return `${n.toFixed(n >= 10 ? 0 : 1)}%`;
 }

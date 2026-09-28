@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Damien Real Estate">
+  <rect width="32" height="32" rx="7" fill="#F8F5EC"/>
+  <path fill="#0F5132" fill-rule="evenodd" d="M6 4.5h9.6c6.2 0 11.4 5.1 11.4 11.5S21.8 27.5 15.6 27.5H6V4.5zm11.8 3.8 5.8 5.3V24.2H12.2V13.6l5.6-5.3z"/>
+  <rect x="16.3" y="17.6" width="4.6" height="6.6" rx="0.45" fill="#E76F22"/>
+</svg>
