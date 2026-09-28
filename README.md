@@ -45,6 +45,10 @@ Hosted deploys **require** a pooled Neon `DATABASE_URL`. Without it the app
 refuses to start on Vercel — serverless has no disk, so an embedded database
 would wipe listings, CMS and accounts on every cold start.
 
+This repo used to be Next.js. If a Vercel deploy fails looking for `.next`,
+set **Framework Preset** to **TanStack Start** (or keep `vercel.json`, which
+already pins that).
+
 1. Create a project at [neon.tech](https://neon.tech).
 2. Copy the **pooled** connection string (`-pooler` in the host).
 3. In the Vercel project → Settings → Environment Variables, set:

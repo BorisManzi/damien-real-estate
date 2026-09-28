@@ -177,8 +177,10 @@ async function createSql(): Promise<Sql> {
     );
   }
   // Hosted Vercel has no durable disk. PGLite would spin up empty on every
-  // cold start and drop listings/CMS/accounts. Require Neon there.
-  if (process.env.VERCEL && !databaseUrl) {
+  // cold start and drop listings/CMS/accounts. Require Neon at *request*
+  // time. Skip during `CI` so `vite build` / prerender can finish before
+  // DATABASE_URL is attached.
+  if (process.env.VERCEL && !process.env.CI && !databaseUrl) {
     throw new Error(
       "DATABASE_URL is required on Vercel so listings, homepage CMS and accounts persist. Attach a Neon pooled connection string.",
     );
